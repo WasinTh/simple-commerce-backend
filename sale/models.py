@@ -1,0 +1,60 @@
+from django.db import models
+from catalog.models import Product
+from shop.models import Member
+
+
+class Cart(models.Model):
+    member = models.OneToOneField(Member, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.member}"
+
+    @property
+    def total_price(self):
+        price = 0
+        for item in self.items.all():
+            price += item.product.price * item.quantity
+        return price
+
+    @property
+    def total_item(self):
+        return self.items.count()
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.cart.member} - {self.product.name} - {self.quantity}"
+
+
+class Order(models.Model):
+    class Status(models.TextChoices):
+        PENDING = 'pending'
+        CONFIRMED = 'confirmed'
+
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    email = models.EmailField()
+    shipping_address = models.TextField()
+    slip_image = models.ImageField(upload_to='slip_images/')
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.cart.member} - {self.total_price}"
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.order.cart.member} - {self.product.name} - {self.quantity}"
