@@ -22,6 +22,27 @@ class Cart(models.Model):
     def total_item(self):
         return self.items.count()
 
+    def __generate_order_items(self, order):
+        for item in self.items.all():
+            OrderItem.objects.create(
+                order=order, 
+                product=item.product, 
+                quantity=item.quantity,
+                price=item.product.price
+            )
+
+    def checkout(self, email, shipping_address, slip_image=None):
+        order = Order.objects.create(
+            cart=self,
+            total_price=self.total_price,
+            email=email,
+            shipping_address=shipping_address,
+            slip_image=slip_image,
+        )
+        self.__generate_order_items(order)
+        self.items.all().delete()  # clear cart items
+        return order
+
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')

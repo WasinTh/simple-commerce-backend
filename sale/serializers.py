@@ -8,7 +8,7 @@ class AddCartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItem
-        fields = ['product', 'quantity']
+        fields = ['product', 'quantity', 'total_item', 'total_price']
 
     def validate_quantity(self, value):
         if value <= 0:
@@ -47,6 +47,14 @@ class SubmitPaymentSerializer(serializers.ModelSerializer):
         if not cart.items.exists():
             raise serializers.ValidationError("Cannot submit payment: cart is empty.")
         return attrs
+
+    def create(self, validated_data):
+        cart = self.context['request'].user.member.cart
+        return cart.checkout(
+            email=validated_data['email'],
+            shipping_address=validated_data['shipping_address'],
+            slip_image=validated_data.get('slip_image'),
+        )
 
     class Meta:
         model = Order
