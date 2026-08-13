@@ -59,13 +59,19 @@ class Order(models.Model):
         CONFIRMED = 'confirmed'
 
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2)
     email = models.EmailField()
     shipping_address = models.TextField()
     slip_image = models.ImageField(upload_to='slip_images/')
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def total_price(self):
+        total_price = 0
+        for item in self.items.all():
+            total_price += item.price * item.quantity
+        return total_price
 
     def __str__(self):
         return f"{self.cart.member} - {self.total_price}"
@@ -75,7 +81,7 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
+    price = models.DecimalField(max_digits=10, decimal_places=2, help_text='Price per item')
 
     def __str__(self):
         return f"{self.order.cart.member} - {self.product.name} - {self.quantity}"
