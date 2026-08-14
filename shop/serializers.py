@@ -4,11 +4,12 @@ from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 
-class MemberCreateSerializer(serializers.ModelSerializer):
+class MemberCreateSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True, write_only=True)
     password = serializers.CharField(required=True, write_only=True)
     first_name = serializers.CharField(required=True, write_only=True)
     last_name = serializers.CharField(required=True, write_only=True)
+    address = serializers.CharField(required=True, write_only=True)
 
     def create(self, validated_data):
         email = validated_data.pop('email')
@@ -24,10 +25,6 @@ class MemberCreateSerializer(serializers.ModelSerializer):
             last_name=last_name,
         )
         return Member.objects.create(user=user, address=address)
-
-    class Meta:
-        model = Member
-        exclude = ['user']
 
 
 class MemberSerializer(serializers.ModelSerializer):
