@@ -9,7 +9,7 @@ class ProductInline(admin.TabularInline):
 
 
 @admin.register(Category)
-class AuthorAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'products_count')
     inlines = [ProductInline]
     search_fields = ['name']
