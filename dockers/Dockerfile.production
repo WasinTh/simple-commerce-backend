@@ -1,0 +1,43 @@
+FROM astral/uv:python3.14-trixie-slim
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy
+
+# System deps: build tools, supervisor, and Postgres client libs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    ca-certificates \
+    build-essential \
+    supervisor \
+    libpq-dev \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install deps first for layer caching
+COPY pyproject.toml uv.lock* ./
+RUN uv sync --frozen --no-dev --no-install-project
+
+# Copy project
+COPY . .
+
+RUN uv sync --frozen --no-dev
+
+# Collect static (adjust/remove if not needed)
+RUN uv run python manage.py collectstatic --noinput || true
+
+# Run migrations
+RUN uv run python manage.py migrate
+
+# Supervisor config
+COPY ./dockers/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN mkdir -p /var/log/supervisor
+
+EXPOSE 8000
+
+CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

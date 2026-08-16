@@ -1,4 +1,9 @@
-# Byte-compiled / cache
+# Git
+.git
+.gitignore
+.gitattributes
+
+# Python bytecode / caches
 __pycache__/
 *.py[cod]
 *$py.class
@@ -17,21 +22,22 @@ venv/
 env/
 ENV/
 
-# Environment / secrets
+# Environment / secrets — inject at runtime, never bake in
 .env
 .env.*
 !.env.example
 
-# Django
+# Django local artifacts
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 media/
 static/
+staticfiles/
 *.pot
 
-# Testing / coverage / type checkers
+# Tests / coverage / type checkers
 .coverage
 .coverage.*
 htmlcov/
@@ -45,6 +51,9 @@ nosetests.xml
 coverage.xml
 *.cover
 .cache/
+**/tests.py
+**/tests/
+**/test_*.py
 
 # IDE / editors
 .idea/
@@ -63,6 +72,17 @@ Desktop.ini
 # uv / packaging
 .python-version
 
-# Build script
-dockers/build.sh
-dockers/deploy.sh
+# Docker (keep supervisord.conf for the production image)
+.dockerignore
+dockers/*
+!dockers/supervisord.conf
+
+# Docs and API collections
+README.md
+*.md
+SimpleCommerce.postman_collection.json
+
+# Cursor / local tooling
+.cursor/
+.claude/
+AGENTS.md
