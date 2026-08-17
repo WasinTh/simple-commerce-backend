@@ -1,0 +1,218 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: SimpleCommerce
+meta:
+  id: wrk_92b15f603dff48fdbfe88e51f9c466f4
+  created: 1786629945092
+  modified: 1786629945092
+  description: ""
+collection:
+  - name: SimpleCommerce
+    meta:
+      id: fld_64e4014ef0c840f0b695b6be1ebf8e24
+      created: 1786629945093
+      modified: 1786887338904
+      sortKey: -1786629937171
+      description: ""
+    children:
+      - url: http://localhost:8000/api/shop/register/
+        name: Register
+        meta:
+          id: req_6c204f821bb24858941df5f4aea8be74
+          created: 1786629945093
+          modified: 1786887280103
+          isPrivate: false
+          description: ""
+          sortKey: -1786629937170
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            {
+            	"email": "c6@mail.com",
+            	"password": "1234",
+            	"first_name": "Customer 6",
+            	"last_name": "Smith",
+            	"address": "10 Phuket Thailand 83000"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/shop/login/
+        name: Authenticate
+        meta:
+          id: req_47827bc5e2bb43d690066d2298d2955b
+          created: 1786629945094
+          modified: 1786886562035
+          isPrivate: false
+          description: ""
+          sortKey: -1786629937169
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            {
+            	"username": "admin",
+            	"password": "admin"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/shop/banner/
+        name: BannerList
+        meta:
+          id: req_83b8e6b11bab4508aace8644d0fd08e4
+          created: 1786629945094
+          modified: 1786629945094
+          isPrivate: false
+          description: ""
+          sortKey: -1786629937168
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/catalog/product/
+        name: ProductList
+        meta:
+          id: req_93e4a523cc4a4e5d9714eafdaaaca45e
+          created: 1786629945095
+          modified: 1786629945095
+          isPrivate: false
+          description: ""
+          sortKey: -1786629937167
+        method: GET
+        parameters:
+          - name: page
+            value: "1"
+            disabled: false
+          - name: page_size
+            value: "10"
+            disabled: false
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/sale/submit-payment/
+        name: SubmitPayment
+        meta:
+          id: req_74add17d106d4ef5a5a3dcece1231450
+          created: 1786629945096
+          modified: 1786630310830
+          isPrivate: false
+          description: ""
+          sortKey: -1786629937164
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - name: email
+              value: demo@mail.com
+              description: ""
+              disabled: false
+            - name: shipping_address
+              value: 999 Phuket Thailand 83000
+              description: ""
+              disabled: false
+            - name: slip_image
+              value: ""
+              description: ""
+              disabled: false
+              fileName: /Users/localadmin/Works/training/simple-commerce-backend/images/Slip/slip_1.png
+              type: file
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/sale/cart-detail/
+        name: CartListItem
+        meta:
+          id: req_7b0f7900ee7e43c48c77a445ebcfcbcc
+          created: 1786629945096
+          modified: 1786630046381
+          isPrivate: false
+          description: ""
+          sortKey: -1786629937165
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8000/api/sale/add-cart-item/
+        name: CartAddItem
+        meta:
+          id: req_b9a40782fdd14b44bee0c24363cc0ea1
+          created: 1786629945096
+          modified: 1786630028956
+          isPrivate: false
+          description: ""
+          sortKey: -1786629937166
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "product": 1,
+                "quantity": 2
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    authentication:
+      type: none
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_a7b8f3344aa439ee8af21e3e8d2daa2f14ce6977
+    created: 1786629946366
+    modified: 1786629946366
+environments:
+  name: Base Environment
+  meta:
+    id: env_a7b8f3344aa439ee8af21e3e8d2daa2f14ce6977
+    created: 1786629945097
+    modified: 1786629945097
+    isPrivate: false
