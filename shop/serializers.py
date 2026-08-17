@@ -38,18 +38,21 @@ class MemberSerializer(serializers.ModelSerializer):
 
 
 class MemberLoginSerializer(TokenObtainPairSerializer):
+    email = serializers.EmailField(required=True, write_only=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields.pop('username', None)
+
     def validate(self, attrs):
+        attrs['username'] = attrs.pop('email')
         data = super().validate(attrs)
         member = Member.objects.get(user=self.user)
-        
+
         return {
             'token': data['access'],
             'user': MemberSerializer(member).data
         }
-
-    class Meta:
-        model = User
-        fields = ['email', 'password']
 
 
 class BannerSerializer(serializers.ModelSerializer):
