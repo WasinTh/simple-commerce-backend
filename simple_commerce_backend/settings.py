@@ -35,6 +35,13 @@ DEBUG = env('DEBUG', bool, default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
 CORS_ORIGIN_ALLOW_ALL = DEBUG
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://sc1.al8m.com",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
+
 
 # Application definition
 
