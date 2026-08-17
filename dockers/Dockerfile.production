@@ -30,9 +30,6 @@ RUN uv sync --frozen --no-dev
 # Collect static (adjust/remove if not needed)
 RUN uv run python manage.py collectstatic --noinput || true
 
-# Run migrations
-RUN uv run python manage.py migrate
-
 # Supervisor config
 COPY ./dockers/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
