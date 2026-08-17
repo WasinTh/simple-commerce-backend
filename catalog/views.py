@@ -2,6 +2,8 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from catalog.models import Product
 from catalog.serializers import ProductSerializer
 from rest_framework.pagination import PageNumberPagination
+from .filters import ProductFilter
+
 
 class ProductPagination(PageNumberPagination):
     page_size = 2
@@ -18,3 +20,4 @@ class ProductView(ReadOnlyModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     pagination_class = ProductPagination
+    filterset_class = ProductFilter
