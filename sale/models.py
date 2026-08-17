@@ -20,7 +20,10 @@ class Cart(models.Model):
 
     @property
     def total_item(self):
-        return self.items.count()
+        quantity = 0
+        for item in self.items.all():
+            quantity += item.quantity
+        return quantity
 
     def __generate_order_items(self, order):
         for item in self.items.all():

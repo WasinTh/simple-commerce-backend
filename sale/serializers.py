@@ -3,8 +3,8 @@ from sale.models import CartItem, Cart, Order
 
 
 class AddCartItemSerializer(serializers.ModelSerializer):
-    total_item = serializers.IntegerField(read_only=True)
-    total_price = serializers.DecimalField(read_only=True, max_digits=10, decimal_places=2)
+    total_item = serializers.IntegerField(source="cart.total_item", read_only=True)
+    total_price = serializers.DecimalField(source="cart.total_price", read_only=True, max_digits=10, decimal_places=2)
 
     class Meta:
         model = CartItem
@@ -32,12 +32,6 @@ class CartDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cart
         fields = '__all__'
-
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     data['total_item'] = instance.total_item
-    #     data['total_price'] = instance.total_price
-    #     return data
         
 
 class SubmitPaymentSerializer(serializers.ModelSerializer):
@@ -58,14 +52,4 @@ class SubmitPaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = [
-            'id',
-            'email',
-            'shipping_address',
-            'slip_image',
-            'cart',
-            'total_price',
-            'status',
-            'created_at',
-        ]
-        read_only_fields = ['id', 'cart', 'total_price', 'status', 'created_at']
+        exclude = ['cart']
