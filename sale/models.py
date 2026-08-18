@@ -37,7 +37,6 @@ class Cart(models.Model):
     def checkout(self, email, shipping_address, slip_image=None):
         order = Order.objects.create(
             cart=self,
-            total_price=self.total_price,
             email=email,
             shipping_address=shipping_address,
             slip_image=slip_image,
