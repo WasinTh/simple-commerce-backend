@@ -41,7 +41,7 @@ class CartAPITestCase(TestCase):
         self.product = ProductFactory()
         
     def test_add_item_to_cart(self):
-        response = self.client.post(reverse('add-cart-item'), {
+        response = self.client.post("/api/sale/add-cart-item/", {
             'product': self.product.id,
             'quantity': 10
         })
